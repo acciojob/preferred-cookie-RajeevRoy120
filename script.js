@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   var fontSizeInput = document.getElementById("fontsize");
   var fontColorInput = document.getElementById("fontcolor");
-  var form = document.getElementById("fontForm");
+  var form = document.querySelector("form"); // Selects the first form
 
   // Load saved preferences from cookies
   fontSizeInput.value = getCookie("fontsize") || "16";
@@ -33,3 +33,4 @@ document.addEventListener("DOMContentLoaded", function () {
     return null;
   }
 });
+
