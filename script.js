@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const fontSizeInput = document.getElementById("fontsize");
   const fontColorInput = document.getElementById("fontcolor");
-  const saveButton = document.getElementById("savePreferences");
+  const form = document.getElementById("fontForm");
 
   // Function to set CSS variables
   function applyPreferences(fontSize, fontColor) {
@@ -12,27 +12,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to get cookie value
   function getCookie(name) {
-    const cookies = document.cookie.split("; ");
-    for (let cookie of cookies) {
-      const [key, value] = cookie.split("=");
-      if (key === name) return decodeURIComponent(value);
-    }
-    return null;
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match) return match[2];
+    else return null;
   }
 
   // Load saved preferences from cookies
-  const savedFontSize = getCookie("fontsize") || "16";
-  const savedFontColor = getCookie("fontcolor") || "#000000";
-  fontSizeInput.value = savedFontSize;
-  fontColorInput.value = savedFontColor;
-  applyPreferences(savedFontSize, savedFontColor);
+  fontSizeInput.value = getCookie("fontsize") || "16";
+  fontColorInput.value = getCookie("fontcolor") || "#000000";
+  applyPreferences(fontSizeInput.value, fontColorInput.value);
 
-  // Save preferences in cookies
-  saveButton.addEventListener("click", () => {
-    const fontSize = fontSizeInput.value;
-    const fontColor = fontColorInput.value;
-    document.cookie = `fontsize=${fontSize}; path=/; max-age=31536000`;
-    document.cookie = `fontcolor=${fontColor}; path=/; max-age=31536000`;
-    applyPreferences(fontSize, fontColor);
-  });
+  // Save preferences in cookies when form is submitted
+  form.onsubmit = function (e) {
+    e.preventDefault();
+    document.cookie = `fontsize=${fontSizeInput.value}; path=/; max-age=31536000`;
+    document.cookie = `fontcolor=${fontColorInput.value}; path=/; max-age=31536000`;
+    applyPreferences(fontSizeInput.value, fontColorInput.value);
+  };
 });
